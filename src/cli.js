@@ -18,21 +18,6 @@ function prettify(caption, deps) {
   return list.length ? [caption].concat(list) : [];
 }
 
-function getParsers(parsers) {
-  return typeof parsers === 'undefined'
-    ? undefined
-    : Object.assign({}, ...parsers.split(',').map(keyValuePair => {
-      const [glob, value] = keyValuePair.split(':');
-      return { [glob]: value.split('&').map(name => depcheck.parser[name]) };
-    }));
-}
-
-function getDetectors(detectors) {
-  return typeof detectors === 'undefined'
-    ? undefined
-    : detectors.split(',').map(name => depcheck.detector[name]);
-}
-
 function getSpecials(specials) {
   return typeof specials === 'undefined'
     ? undefined
@@ -83,8 +68,6 @@ export default function cli(args, log, error, exit) {
       ignoreBinPackage: opt.argv.ignoreBinPackage,
       ignoreMatches: (opt.argv.ignores || '').split(','),
       ignoreDirs: (opt.argv.ignoreDirs || '').split(','),
-      parsers: getParsers(opt.argv.parsers),
-      detectors: getDetectors(opt.argv.detectors),
       specials: getSpecials(opt.argv.specials),
     }, unused => {
       if (opt.argv.json) {
